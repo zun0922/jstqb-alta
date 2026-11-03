@@ -1,0 +1,405 @@
+<title>AL-TA v4.0 章別ドリル</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDPMincho:wght@400;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* レイアウト: 単元カードの一覧（学習の地図）→ 1問ずつのドリル → 小テストの採点票。模擬試験と同じ答案用紙の体裁。 */
+:root{
+  --paper:#ECEFF3; --sheet:#FFFFFF; --ink:#17202B; --muted:#5A6574; --line:#D2D9E1;
+  --accent:#1D4F91; --accent-soft:#E1E9F5; --accent-ink:#FFFFFF;
+  --flag:#A35F00; --flag-soft:#FAEED8;
+  --good:#1F6F47; --good-soft:#DFF0E6; --bad:#B42318; --bad-soft:#FBE3E0;
+  --f-display:"BIZ UDPMincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F141B; --sheet:#171E28; --ink:#E4E9EF; --muted:#98A4B3; --line:#2B3644;
+    --accent:#86AEE6; --accent-soft:#1D2B3F; --accent-ink:#0F141B;
+    --flag:#E2A94B; --flag-soft:#33281A;
+    --good:#62C08F; --good-soft:#15291F; --bad:#F2857B; --bad-soft:#36191A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F141B; --sheet:#171E28; --ink:#E4E9EF; --muted:#98A4B3; --line:#2B3644;
+  --accent:#86AEE6; --accent-soft:#1D2B3F; --accent-ink:#0F141B;
+  --flag:#E2A94B; --flag-soft:#33281A;
+  --good:#62C08F; --good-soft:#15291F; --bad:#F2857B; --bad-soft:#36191A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.75}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--sheet)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;line-height:1.4;margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sheet);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;min-height:56px;flex-wrap:wrap;padding-block:8px}
+.brand{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+.brand b{font-family:var(--f-display);font-size:16px}
+.brand span{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.bar .spacer{flex:1}
+.prog{font-size:13px;color:var(--muted)}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--line);background:var(--sheet)}
+.dot.cur{border-color:var(--ink);border-width:2px}
+.dot.ok{background:var(--good);border-color:var(--good)}
+.dot.ng{background:var(--bad);border-color:var(--bad)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 16px;border-radius:var(--r);border:1px solid var(--line);background:var(--sheet);cursor:pointer;font-size:14px;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.ghost{background:transparent}
+.btn.small{min-height:34px;padding:0 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:12px;font-size:12px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.lo{font-family:var(--f-mono)}
+.chip.k{border-color:var(--accent);color:var(--accent);font-weight:700}
+
+/* menu */
+.menu{padding-block:28px 56px;display:grid;gap:22px}
+.intro{display:grid;gap:8px}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted)}
+.intro h1{font-size:clamp(22px,3.6vw,30px)}
+.intro p{margin:0;max-width:68ch;color:var(--muted)}
+.sum{display:flex;gap:8px 22px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.sum b{color:var(--ink);font-family:var(--f-mono);font-weight:600}
+.group{display:grid;gap:10px}
+.group h2{font-size:15px;color:var(--muted);font-family:var(--f-body);letter-spacing:.06em}
+.units{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.unit{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px;align-content:start}
+.unit.wide{grid-column:1/-1}
+.unit.off{background:transparent;border-style:dashed}
+.unit.off h3,.unit.off .meta{color:var(--muted)}
+.unit h3{font-size:16px}
+.unit .meta{font-size:12.5px;color:var(--muted);display:flex;gap:6px 14px;flex-wrap:wrap}
+.unit .meta b{font-family:var(--f-mono);color:var(--ink);font-weight:600}
+.mastery{display:grid;gap:4px}
+.track{position:relative;height:8px;background:var(--paper);border:1px solid var(--line);border-radius:4px;overflow:hidden;display:flex}
+.seg{height:100%}
+.seg.m{background:var(--good)} .seg.s{background:var(--accent);opacity:.55} .seg.w{background:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.legend i.m{background:var(--good)} .legend i.s{background:var(--accent);opacity:.55} .legend i.w{background:var(--bad)} .legend i.u{border:1px solid var(--line)}
+.resume{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 16px;border:1px dashed var(--accent);border-radius:var(--r);background:var(--accent-soft)}
+.resume p{margin:0;flex:1;min-width:200px}
+.danger-zone{display:grid;gap:10px;justify-items:start}
+.confirm{border:1px solid var(--bad);background:var(--bad-soft);border-radius:var(--r);padding:14px;display:grid;gap:10px}
+.confirm p{margin:0;font-size:14px}
+
+/* question */
+.drill{padding-block:24px 56px;display:grid;gap:16px}
+.qcard{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:24px clamp(16px,3.5vw,36px);display:grid;gap:18px;min-width:0}
+.qhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qno{font-family:var(--f-display);font-size:20px;font-weight:700}
+.stem{display:grid;gap:12px;min-width:0}
+.stem p{margin:0}
+.stem .box{border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;background:var(--paper)}
+.stem .box p+p{margin-top:4px}
+.stem ul,.stem ol{margin:0;padding-left:1.4em}
+.ask{font-weight:700}
+.pick2{display:inline-block;margin-left:6px;padding:0 6px;border:1px solid var(--ink);font-size:12px;border-radius:3px}
+.tblwrap{overflow-x:auto}
+table.tbl{border-collapse:collapse;width:100%;font-size:14px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.tbl th{background:var(--accent-soft);font-weight:700;white-space:nowrap}
+.tbl td.c,.tbl th.c{text-align:center}
+.opts{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.opt{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer;background:var(--sheet);text-align:left;width:100%}
+.opt:hover{border-color:var(--accent)}
+.bubble{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center;font-family:var(--f-mono);font-size:13px;font-weight:600;color:var(--muted)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .bubble{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.right .bubble{border-color:var(--good);color:var(--good)}
+.opt.sel.right .bubble{background:var(--good);color:var(--sheet)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .bubble{background:var(--bad);border-color:var(--bad);color:var(--sheet)}
+.opt[disabled]{cursor:default}
+.opt .t{min-width:0}
+.hint{font-size:13px;color:var(--flag);margin:0;min-height:1.4em}
+.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
+.explain{border-top:2px solid var(--ink);padding-top:16px;display:grid;gap:12px}
+.verdict{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-weight:700}
+.verdict.ok{color:var(--good)} .verdict.ng{color:var(--bad)}
+.explain p{margin:0}
+.why{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.why li{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:14px}
+.why li b{font-family:var(--f-mono);color:var(--muted)}
+.why li.ok b{color:var(--good)}
+
+/* result */
+.result{padding-block:28px 64px;display:grid;gap:20px}
+.scorecard{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:24px clamp(18px,4vw,36px);display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+.big{font-family:var(--f-mono);font-size:clamp(40px,8vw,56px);font-weight:600;line-height:1}
+.big small{font-size:.42em;color:var(--muted);font-weight:500}
+.scorecard .side{display:grid;gap:12px}
+.scorecard h2{font-size:18px}
+.review{display:grid;gap:10px}
+.ritem{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r)}
+.ritem summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 16px}
+.ritem summary::-webkit-details-marker{display:none}
+.mk{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px}
+.mk.ok{background:var(--good-soft);color:var(--good)} .mk.ng{background:var(--bad-soft);color:var(--bad)}
+.rno{font-family:var(--f-mono);font-weight:600}
+.rtitle{font-size:13.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rbody{padding:18px clamp(14px,3vw,28px) 22px;display:grid;gap:16px;border-top:1px solid var(--line)}
+
+@media (max-width:720px){
+  .units{grid-template-columns:minmax(0,1fr)}
+  .scorecard{grid-template-columns:minmax(0,1fr)}
+  .ritem summary{grid-template-columns:auto auto minmax(0,1fr)}
+  .ritem summary .chip{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand"><b>AL-TA v4.0 章別ドリル</b><span>JSTQB Advanced Level テストアナリスト</span></div>
+    <div class="spacer"></div>
+    <div id="hdr" class="row"></div>
+  </div>
+</header>
+<main id="main" class="wrap"></main>
+
+<script>
+const KEY = 'alta-v4-drill-1';
+const L = ['a','b','c','d','e'];
+
+/* 単元。問題がまだない単元は「準備中」として表示する */
+const UNITS = [
+  {id:'1',   group:'第1章', name:'テストプロセスにおけるテストアナリストのタスク', size:10, los:'SDLCごとの関与・テスト活動のタスク・テストケースの品質基準・テストオラクル・テストデータ・キーワード駆動テスト'},
+  {id:'2',   group:'第2章', name:'リスクベースドテストにおけるテストアナリストのタスク', size:5, los:'プロダクトリスク分析への貢献・リグレッションテストの範囲の決定（影響度分析）'},
+  {id:'3.1', group:'第3章', name:'3.1 データに基づくテスト技法', size:5, los:'ドメインテスト・組み合わせテスト・ランダムテスト'},
+  {id:'3.2', group:'第3章', name:'3.2 振る舞いに基づくテスト技法', size:5, los:'CRUDテスト・状態遷移テスト・シナリオベースドテスト'},
+  {id:'3.3', group:'第3章', name:'3.3 ルールに基づくテスト技法', size:5, los:'デシジョンテーブルテスト・メタモルフィックテスト'},
+  {id:'3.4', group:'第3章', name:'3.4 経験ベースのテスト', size:5, los:'テストチャーター・チェックリスト・クラウドテスト'},
+  {id:'3.5', group:'第3章', name:'3.5 最も適切なテスト技法の適用', size:5, los:'プロダクトリスクに応じた技法選択・テスト設計の自動化'},
+  {id:'3',   group:'第3章', name:'第3章まとめ（3.1〜3.5から出題）', size:10, wide:true, los:'第3章の全50問から、苦手な問題を優先して出題'},
+  {id:'4',   group:'第4章', name:'品質特性のテスト', size:5, los:'機能適合性の副特性・使用性・適応性とインストール性・相互運用性'},
+  {id:'5',   group:'第5章', name:'ソフトウェア欠陥予防', size:10, los:'欠陥予防のメトリクス・モデルによる欠陥検出・レビュー技法・テスト結果の分析・欠陥分類'}
+];
+
+/* ---------------- 問題バンク ---------------- */
+const BANK = [
+/*__BANK__*/
+];
+
+const byId = Object.fromEntries(BANK.map(q=>[q.id,q]));
+const poolOf = u => BANK.filter(q => u.id==='3' ? q.unit.startsWith('3.') : q.unit===u.id);
+const unitOf = id => UNITS.find(u=>u.id===id);
+
+/* ---------------- 保存 ---------------- */
+// H: 学習履歴 {n: 開始したセッション数, q: {id: {seen, ok, streak, last(1/0), s(最後に出たセッション番号)}}}
+// S: 進行中のセッション
+let H = {n:0, q:{}}, S = null, askReset = false;
+function load(){ try{ const v=JSON.parse(localStorage.getItem(KEY)); if(v && v.v===1){ H=v.H||H; S=v.S||null; } }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify({v:1,H,S})); }catch(e){} }
+
+/* ---------------- 出題ロジック ---------------- */
+// 未出題・前回不正解を優先し、連続正解と直前の回に出た問題は出にくくする
+function weight(q, prev){
+  const h = H.q[q.id];
+  let w = !h ? 3 : h.last===0 ? 4 : h.streak>=3 ? 0.4 : h.streak===2 ? 0.8 : 1.5;
+  if(h && h.s===prev) w *= 0.25;
+  return w;
+}
+function pick(pool, n){
+  const prev = H.n, items = pool.map(q=>({q, w:weight(q,prev)})), out = [];
+  while(out.length < n && items.length){
+    const total = items.reduce((s,x)=>s+x.w,0);
+    let r = Math.random()*total, i = 0;
+    while(i < items.length-1 && (r -= items[i].w) > 0) i++;
+    out.push(items.splice(i,1)[0].q);
+  }
+  return out;
+}
+function shuffled(n){ const a=[...Array(n).keys()]; for(let i=n-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function begin(unitId, qs, label){
+  H.n += 1;
+  S = {unit:unitId, label, sid:H.n, items:qs.map(q=>({id:q.id, perm:shuffled(q.opts.length)})), pos:0, ans:{}, rev:{}, done:false};
+  save(); renderDrill(); window.scrollTo({top:0});
+}
+function startUnit(unitId, n){
+  const u = unitOf(unitId), pool = poolOf(u);
+  begin(unitId, pick(pool, Math.min(n, pool.length)), u.name);
+}
+
+/* ---------------- 判定と記録 ---------------- */
+const cur = () => S.items[S.pos];
+function isRight(p){ const it=S.items[p], q=byId[it.id], a=(S.ans[p]||[]).slice().sort().join(','); return a!=='' && a===q.ans.slice().sort().join(','); }
+function answered(p){ const q=byId[S.items[p].id]; return (S.ans[p]||[]).length === (q.pick||1); }
+function record(p){
+  const id=S.items[p].id, ok=isRight(p), h=H.q[id] || {seen:0, ok:0, streak:0, last:null, s:0};
+  h.seen++; if(ok){ h.ok++; h.streak++; } else h.streak=0;
+  h.last = ok?1:0; h.s = S.sid; H.q[id]=h;
+}
+
+/* ---------------- 画面: 単元一覧 ---------------- */
+function stats(pool){
+  let m=0,s=0,w=0,u=0;
+  pool.forEach(q=>{ const h=H.q[q.id]; if(!h) u++; else if(h.last===0) w++; else if(h.streak>=2) m++; else s++; });
+  const seen = pool.length-u, okLast = pool.filter(q=>H.q[q.id] && H.q[q.id].last===1).length;
+  return {m,s,w,u,seen,okLast,n:pool.length};
+}
+function renderMenu(){
+  hdr.innerHTML = '';
+  const ready = UNITS.filter(u=>poolOf(u).length);
+  const all = stats(BANK);
+  const groups = [...new Set(UNITS.map(u=>u.group))];
+  const card = u => {
+    const pool = poolOf(u);
+    if(!pool.length) return `<div class="unit off"><h3>${u.group}　${u.name}</h3><div class="meta">${u.plan}</div></div>`;
+    const st = stats(pool), pct = x => (x/st.n*100)+'%';
+    const sizes = [5,10].filter(n=>n<=pool.length);
+    return `<div class="unit${u.wide?' wide':''}">
+      <h3>${u.name}</h3>
+      <div class="meta"><span>${u.los}</span></div>
+      <div class="mastery">
+        <div class="track" aria-label="習熟度"><span class="seg m" style="width:${pct(st.m)}"></span><span class="seg s" style="width:${pct(st.s)}"></span><span class="seg w" style="width:${pct(st.w)}"></span></div>
+        <div class="meta"><span>問題 <b>${st.n}</b></span><span>未出題 <b>${st.u}</b></span><span>直近正解 <b>${st.okLast}</b>/${st.seen}</span>${st.w?`<span>要復習 <b>${st.w}</b></span>`:''}</div>
+      </div>
+      <div class="row">${sizes.map(n=>`<button class="btn small${n===u.size?' primary':''}" data-start="${u.id}" data-n="${n}">${n}問で始める</button>`).join('')}</div>
+    </div>`;
+  };
+  main.innerHTML = `<section class="menu">
+    <div class="intro">
+      <div class="eyebrow">CTAL-TA SYLLABUS V4.0.J01 準拠 ／ ドリル専用問題（模擬試験とは別）</div>
+      <h1>章別ドリル</h1>
+      <p>単元を選ぶと5問または10問を出題します。前回間違えた問題とまだ解いていない問題を優先し、続けて正解している問題は出にくくなります。選択肢の並びは毎回入れ替わります。</p>
+      <div class="sum"><span>収録 <b>${BANK.length}</b>問</span><span>解いた問題 <b>${all.seen}</b></span><span>習熟（2回以上連続正解） <b>${all.m}</b></span><span>要復習 <b>${all.w}</b></span></div>
+      <div class="legend"><span><i class="m"></i>習熟</span><span><i class="s"></i>正解（1回）</span><span><i class="w"></i>要復習（直近不正解）</span><span><i class="u"></i>未出題</span></div>
+    </div>
+    ${S && !S.done ? `<div class="resume"><p>「${S.label}」の途中です（${Object.keys(S.rev).length}/${S.items.length}問 解答済み）。</p><button class="btn primary" data-act="resume">続きから再開</button><button class="btn ghost" data-act="drop">中断して破棄</button></div>`:''}
+    ${groups.map(g=>`<div class="group"><h2>${g}</h2><div class="units">${UNITS.filter(u=>u.group===g).map(card).join('')}</div></div>`).join('')}
+    <div class="danger-zone">
+      ${askReset ? `<div class="confirm"><p>すべての学習履歴（正誤と出題回数）を消去します。元に戻せません。</p><div class="row"><button class="btn danger" data-act="reset-yes">履歴を消去する</button><button class="btn" data-act="reset-no">やめる</button></div></div>`
+        : `<button class="btn ghost small" data-act="reset">学習履歴をリセット</button>`}
+      <p class="note">学習履歴はこのブラウザーにだけ保存されます。非公式の練習問題です。</p>
+    </div>
+  </section>`;
+}
+
+/* ---------------- 画面: ドリル ---------------- */
+function renderHeader(){
+  hdr.innerHTML = `<span class="prog">${S.label}</span><div class="dots" aria-hidden="true">${S.items.map((_,p)=>`<span class="dot${p===S.pos?' cur':''}${S.rev[p]?(isRight(p)?' ok':' ng'):''}"></span>`).join('')}</div><span class="prog mono">${S.pos+1}/${S.items.length}</span>`;
+}
+function renderDrill(){
+  renderHeader();
+  const it = cur(), q = byId[it.id], a = S.ans[S.pos]||[], shown = !!S.rev[S.pos];
+  const opts = it.perm.map((o,j)=>{
+    let c='opt'; if(a.includes(o)) c+=' sel';
+    if(shown){ if(q.ans.includes(o)) c+=' right'; else if(a.includes(o)) c+=' wrong'; }
+    return `<li><button class="${c}" data-opt="${o}" ${shown?'disabled':''} aria-pressed="${a.includes(o)}"><span class="bubble">${L[j]}</span><span class="t">${q.opts[o]}</span></button></li>`;
+  }).join('');
+  const last = S.pos===S.items.length-1;
+  main.innerHTML = `<section class="drill">
+    <article class="qcard" aria-live="polite">
+      <div class="qhead"><span class="qno">第${S.pos+1}問</span><span class="chip k">K${q.k}</span>${shown?`<span class="chip lo">${q.lo}</span>`:''}</div>
+      <div class="stem">${q.stem}</div>
+      <ul class="opts">${opts}</ul>
+      <p class="hint" id="hint"></p>
+      ${shown?explainHtml(S.pos):''}
+      <div class="nav">
+        <button class="btn ghost" data-act="menu">単元一覧へ（中断）</button>
+        <div class="row">${shown
+          ? `<button class="btn primary" data-act="${last?'finish':'next'}">${last?'結果を見る':'次の問題 →'}</button>`
+          : `<button class="btn primary" data-act="reveal" ${answered(S.pos)?'':'disabled'}>解答を確認</button>`}</div>
+      </div>
+    </article>
+  </section>`;
+}
+function explainHtml(p){
+  const it=S.items[p], q=byId[it.id], a=S.ans[p]||[], ok=isRight(p);
+  const lt = o => L[it.perm.indexOf(o)];
+  return `<div class="explain">
+    <div class="verdict ${ok?'ok':'ng'}">${ok?'○ 正解':'× 不正解'}<span class="chip">正解：${q.ans.map(lt).sort().join('、')}</span>${a.length?`<span class="chip">あなたの解答：${a.map(lt).sort().join('、')}</span>`:''}</div>
+    <p>${q.exp}</p>
+    <ul class="why">${it.perm.map((o,j)=>`<li class="${q.ans.includes(o)?'ok':''}"><b>${L[j]}</b><span>${q.why[o]}</span></li>`).join('')}</ul>
+  </div>`;
+}
+function choose(o){
+  if(S.rev[S.pos]) return;
+  const q=byId[cur().id]; let a=(S.ans[S.pos]||[]).slice();
+  if((q.pick||1)===1) a=[o];
+  else if(a.includes(o)) a=a.filter(x=>x!==o);
+  else if(a.length>=q.pick){ const h=document.getElementById('hint'); if(h) h.textContent='この問題は2つまで選べます。選び直す場合は、選択済みの選択肢をもう一度押して解除してください。'; return; }
+  else a.push(o);
+  S.ans[S.pos]=a; save(); renderDrill();
+}
+function reveal(){ if(!answered(S.pos) || S.rev[S.pos]) return; S.rev[S.pos]=true; record(S.pos); save(); renderDrill(); }
+
+/* ---------------- 画面: 結果 ---------------- */
+function renderResult(){
+  hdr.innerHTML = `<span class="prog">${S.label}</span>`;
+  const n=S.items.length, ok=S.items.filter((_,p)=>isRight(p)).length, wrong=S.items.map((it,p)=>isRight(p)?null:it.id).filter(Boolean);
+  const u = unitOf(S.unit);
+  main.innerHTML = `<section class="result">
+    <div class="scorecard">
+      <div><div class="eyebrow">正答</div><div class="big">${ok}<small> / ${n}問</small></div></div>
+      <div class="side">
+        <h2>${ok===n?'全問正解です。':ok/n>=0.65?'合格ラインの65%を超えています。':'合格ラインの65%に届いていません。'}</h2>
+        <div class="row">
+          ${wrong.length?`<button class="btn primary" data-act="retry">間違えた${wrong.length}問をもう一度</button>`:''}
+          ${u?`<button class="btn" data-start="${u.id}" data-n="${Math.min(n,poolOf(u).length)}">同じ単元で次の${Math.min(n,poolOf(u).length)}問</button>`:''}
+          <button class="btn ghost" data-act="menu">単元一覧へ</button>
+        </div>
+      </div>
+    </div>
+    <div class="review">${S.items.map((it,p)=>reviewItem(p)).join('')}</div>
+  </section>`;
+}
+function reviewItem(p){
+  const it=S.items[p], q=byId[it.id], ok=isRight(p), a=S.ans[p]||[];
+  const title=q.stem.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const opts=it.perm.map((o,j)=>{ let c='opt'; if(a.includes(o)) c+=' sel'; if(q.ans.includes(o)) c+=' right'; else if(a.includes(o)) c+=' wrong'; return `<li><div class="${c}"><span class="bubble">${L[j]}</span><span class="t">${q.opts[o]}</span></div></li>`; }).join('');
+  return `<details class="ritem"${ok?'':' open'}><summary><span class="mk ${ok?'ok':'ng'}">${ok?'○':'×'}</span><span class="rno">第${p+1}問</span><span class="rtitle">${title}</span><span class="chip lo">${q.lo}・K${q.k}</span></summary>
+    <div class="rbody"><div class="stem">${q.stem}</div><ul class="opts">${opts}</ul>${explainHtml(p)}</div></details>`;
+}
+
+/* ---------------- イベント ---------------- */
+const main = document.getElementById('main'), hdr = document.getElementById('hdr');
+document.addEventListener('click', e=>{
+  const t=e.target.closest('[data-act],[data-opt],[data-start]'); if(!t) return;
+  if(t.dataset.opt!==undefined){ choose(+t.dataset.opt); return; }
+  if(t.dataset.start){ askReset=false; startUnit(t.dataset.start, +t.dataset.n); return; }
+  const act=t.dataset.act;
+  if(act==='reveal') reveal();
+  else if(act==='next'){ S.pos++; save(); renderDrill(); window.scrollTo({top:0}); }
+  else if(act==='finish'){ S.done=true; save(); renderResult(); window.scrollTo({top:0}); }
+  else if(act==='retry'){ const ids=S.items.filter((_,p)=>!isRight(p)).map(it=>byId[it.id]); begin(S.unit, ids, S.label.replace(/（復習）$/,'')+'（復習）'); }
+  else if(act==='menu'){ save(); renderMenu(); window.scrollTo({top:0}); }
+  else if(act==='resume'){ renderDrill(); }
+  else if(act==='drop'){ S=null; save(); renderMenu(); }
+  else if(act==='reset'){ askReset=true; renderMenu(); }
+  else if(act==='reset-no'){ askReset=false; renderMenu(); }
+  else if(act==='reset-yes'){ H={n:0,q:{}}; S=null; askReset=false; save(); renderMenu(); }
+});
+document.addEventListener('keydown', e=>{
+  if(!S || S.done || !document.querySelector('.qcard') || e.altKey || e.ctrlKey || e.metaKey) return;
+  const it=cur(), j=L.indexOf(e.key.toLowerCase());
+  if(j>-1 && j<it.perm.length){ choose(it.perm[j]); e.preventDefault(); }
+  else if(e.key==='Enter'){
+    if(!S.rev[S.pos]) reveal();
+    else if(S.pos<S.items.length-1){ S.pos++; save(); renderDrill(); }
+    else { S.done=true; save(); renderResult(); }
+    e.preventDefault();
+  }
+});
+
+load();
+if(S && S.done) S = null;
+renderMenu();
+</script>

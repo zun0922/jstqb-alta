@@ -1,0 +1,11 @@
+# シラバスと試験構成表は JSTQB / ISTQB の著作物のため公開しない（入手先は README を参照）
+sources/
+
+# 組み立ての出力と、claude.ai の公開済みファイルの控え（ローカル専用）
+dist/
+
+.published-snapshot/
+
+node_modules/
+.DS_Store
+Thumbs.db
